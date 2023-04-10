@@ -88,16 +88,6 @@ class ProductManager {
 
 const manager = new ProductManager();
 
-/*
-manager.addProduct("Remera", "Remera de algodon", 1000, "-", "a0001", 10);
-manager.addProduct("Pantalon", "Pantalon de algodon", 3000, "-", "a0002", 10);
-manager.addProduct("Jean", "Jean slim fir", 5000, "-", "a0003", 10);
-manager.addProduct("Campera cuero", "Campera de cuero", 10000, "-", "a0004", 10);
-manager.addProduct("Campera", "Campera de algodon", 6000, "-", "a0004", 10);
-*/
-
-// console.log(manager.getProductById(1));
-
 module.exports.fs = fs;
 module.exports.filename = filename;
 module.exports.manager = manager;
