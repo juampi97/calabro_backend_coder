@@ -1,0 +1,38 @@
+[
+	{
+		"id": 1,
+		"title": "Remera",
+		"description": "Remera de algodon",
+		"price": 1000,
+		"thumbnail": "-",
+		"code": "a0001",
+		"stock": 10
+	},
+	{
+		"id": 2,
+		"title": "Pantalon",
+		"description": "Pantalon de algodon",
+		"price": 3000,
+		"thumbnail": "-",
+		"code": "a0002",
+		"stock": 10
+	},
+	{
+		"id": 3,
+		"title": "Jean",
+		"description": "Jean slim fir",
+		"price": 5000,
+		"thumbnail": "-",
+		"code": "a0003",
+		"stock": 10
+	},
+	{
+		"id": 4,
+		"title": "Campera cuero",
+		"description": "Campera de cuero",
+		"price": 10000,
+		"thumbnail": "-",
+		"code": "a0004",
+		"stock": 10
+	}
+]
