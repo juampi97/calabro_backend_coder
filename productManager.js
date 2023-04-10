@@ -1,4 +1,5 @@
 const fs = require("fs");
+const fsp = require("node:fs/promises");
 
 const filename = "./products.json";
 
@@ -36,12 +37,15 @@ class ProductManager {
     return id;
   };
 
-  getProducts = () => {
+  getProducts = async () => {
     if (!fs.existsSync(this.#path)) {
       return [];
     } else {
-      let productos = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
-      return productos;
+      const data = await fsp.readFile(this.#path, "utf-8");
+      if (data) {
+        const products = JSON.parse(data);
+        return products;
+      }
     }
   };
 
@@ -87,6 +91,8 @@ class ProductManager {
 }
 
 const manager = new ProductManager();
+
+console.log(manager.getProducts());
 
 module.exports.fs = fs;
 module.exports.filename = filename;
