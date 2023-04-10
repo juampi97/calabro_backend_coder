@@ -11,7 +11,6 @@ app.get('/products', (req, res) => {
     const limit = req.query.limit;
     const productos = pm.manager.getProducts();
     !limit ? res.send(productos) : res.send(productos.slice(0, limit));
-
 });
 
 app.get('/products/:pid', (req, res) => {
