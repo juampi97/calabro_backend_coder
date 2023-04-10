@@ -14,13 +14,11 @@ app.get('/products', (req, res) => {
 
 });
 
-
 app.get('/products/:pid', (req, res) => {
     const id = parseInt(req.params.pid);
     const producto = pm.manager.getProductById(id);
     producto ? res.send(producto) : res.send('No se encontro el producto');
 });
-
 
 app.listen(8080, () => {
     console.log('Servidor escuchando en el puerto 8080');
