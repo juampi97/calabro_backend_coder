@@ -44,7 +44,7 @@ class ProductManager {
       const data = await fsp.readFile(this.#path, "utf-8");
       if (data) {
         const products = JSON.parse(data);
-        return products;
+        return await products;
       }
     }
   };
@@ -92,8 +92,17 @@ class ProductManager {
 
 const manager = new ProductManager();
 
-console.log(manager.getProducts());
+const resp = async () => {
+  const products = await manager.getProducts();
+  // console.log(products);
+  return await products;
+};
+
+
 
 module.exports.fs = fs;
 module.exports.filename = filename;
 module.exports.manager = manager;
+
+module.exports.resp = resp;
+

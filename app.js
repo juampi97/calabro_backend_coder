@@ -9,9 +9,12 @@ app.get('/', (req, res) => {
 
 app.get('/products', (req, res) => {
     const limit = req.query.limit;
-    const productos = pm.manager.getProducts();
-    console.log(productos);
-    !limit ? res.send(productos) : res.send(productos.slice(0, limit));
+    // const productos = pm.manager.getProducts();
+    // !limit ? res.send(productos) : res.send(productos.slice(0, limit));
+    pm.resp()
+        .then((data) => {
+            !limit ? res.send(data) : res.send(data.slice(0, limit));
+        })
 });
 
 app.get('/products/:pid', (req, res) => {
