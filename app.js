@@ -11,7 +11,7 @@ app.get('/products', (req, res) => {
     const limit = req.query.limit;
     // const productos = pm.manager.getProducts();
     // !limit ? res.send(productos) : res.send(productos.slice(0, limit));
-    pm.resp()
+    pm.manager.getProductos()
         .then((data) => {
             !limit ? res.send(data) : res.send(data.slice(0, limit));
         })
@@ -19,8 +19,11 @@ app.get('/products', (req, res) => {
 
 app.get('/products/:pid', (req, res) => {
     const id = parseInt(req.params.pid);
-    const producto = pm.manager.getProductById(id);
-    producto ? res.send(producto) : res.send('No se encontro el producto');
+    pm.manager.getProductoById(id)
+    .then((data) => {
+        data ? res.send(data) : res.send('No se encontro el producto')
+    })
+    // producto ? res.send(producto) : res.send('No se encontro el producto');
 });
 
 app.listen(8080, () => {

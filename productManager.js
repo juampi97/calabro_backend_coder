@@ -49,15 +49,25 @@ class ProductManager {
     }
   };
 
-  getProductById = (id) => {
+  getProductos = async () => {
+    const products = await this.getProducts();
+    return await products;
+  };
+
+  getProductById = async (id) => {
     if (!fs.existsSync(this.#path)) {
       return console.log("No hay productos");
     }
-    this.#products = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
-    let resultadoBusqueda = this.#products.filter((item) => item.id === id);
+    const products = await this.getProductos();
+    let resultadoBusqueda = products.filter((item) => item.id === id);
     if (resultadoBusqueda.length === 0)
       return console.log("No existe el producto");
-    return resultadoBusqueda[0];
+    return await resultadoBusqueda[0];
+  };
+
+  getProductoById = async (id) => {
+    const product = await this.getProductById(id);
+    return await product;
   };
 
   updateProducto = (id, campo, valor) => {
@@ -92,17 +102,7 @@ class ProductManager {
 
 const manager = new ProductManager();
 
-const resp = async () => {
-  const products = await manager.getProducts();
-  // console.log(products);
-  return await products;
-};
-
-
-
 module.exports.fs = fs;
 module.exports.filename = filename;
 module.exports.manager = manager;
-
-module.exports.resp = resp;
 
