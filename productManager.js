@@ -12,15 +12,17 @@ class ProductManager {
     this.#path = "./products.json";
   }
 
-  // addProduct = (title, description, price, thumbnail, code, stock) => {
-  addProduct = (product) => {
-    // if (!title || !description || !price || !thumbnail || !code || !stock)
-    //   return console.log("Por favor, complete todos los datos");
+  addProduct = async (product) => {
+    let codigo = 0;
+    let { title, description, price, thumbnail, code, stock } = product;
+    if (!title || !description || !price || !thumbnail || !code || !stock) {
+      codigo = "406a";
+      return codigo;
+    }
     let id = this.#generateId();
     let producto = { id, ...product };
-    console.log(producto);
-    let code = this.#saveFile(producto);
-    return code;
+    codigo = this.#saveFile(producto);
+    return codigo;
   };
 
   #saveFile = async (product) => {
@@ -28,9 +30,9 @@ class ProductManager {
     if (!fs.existsSync(this.#path)) {
       fs.writeFileSync(this.#path, JSON.stringify([], null, "\t"));
     }
-    let data = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
+    const data = await this.getProductos();
     if (data.find((item) => item.code === product.code)) {
-      code = 406;
+      code = "406b";
       console.log(code);
       return code;
     }
@@ -87,8 +89,7 @@ class ProductManager {
   updateProducto = async (id, mods) => {
     let code = 0;
     const data = await this.getProductos();
-    if (!data.find((item) => item.id === id))
-    {
+    if (!data.find((item) => item.id === id)) {
       code = 406;
       return code;
     }
