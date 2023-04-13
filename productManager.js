@@ -1,3 +1,4 @@
+const { log } = require("console");
 const fs = require("fs");
 const fsp = require("node:fs/promises");
 
@@ -11,23 +12,32 @@ class ProductManager {
     this.#path = "./products.json";
   }
 
-  addProduct = (title, description, price, thumbnail, code, stock) => {
-    if (!title || !description || !price || !thumbnail || !code || !stock)
-      return console.log("Por favor, complete todos los datos");
+  // addProduct = (title, description, price, thumbnail, code, stock) => {
+  addProduct = (product) => {
+    // if (!title || !description || !price || !thumbnail || !code || !stock)
+    //   return console.log("Por favor, complete todos los datos");
     let id = this.#generateId();
-    let product = { id, title, description, price, thumbnail, code, stock };
-    this.#saveFile(product);
+    let producto = { id, ...product };
+    console.log(producto);
+    let code = this.#saveFile(producto);
+    return code;
   };
 
-  #saveFile = (product) => {
+  #saveFile = async (product) => {
+    let code = 0;
     if (!fs.existsSync(this.#path)) {
       fs.writeFileSync(this.#path, JSON.stringify([], null, "\t"));
     }
-    this.#products = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
-    if (this.#products.find((item) => item.code === product.code))
-      return console.log("Ya existe un producto con el mismo codigo");
-    this.#products.push(product);
-    fs.writeFileSync(this.#path, JSON.stringify(this.#products, null, "\t"));
+    let data = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
+    if (data.find((item) => item.code === product.code)) {
+      code = 406;
+      console.log(code);
+      return code;
+    }
+    data.push(product);
+    fs.writeFileSync(this.#path, JSON.stringify(data, null, "\t"));
+    code = 201;
+    return code;
   };
 
   #generateId = () => {
@@ -55,13 +65,17 @@ class ProductManager {
   };
 
   getProductById = async (id) => {
+    let code = 0;
     if (!fs.existsSync(this.#path)) {
-      return console.log("No hay productos");
+      code = "406a";
+      return code;
     }
     const products = await this.getProductos();
     let resultadoBusqueda = products.filter((item) => item.id === id);
-    if (resultadoBusqueda.length === 0)
-      return console.log("No existe el producto");
+    if (resultadoBusqueda.length === 0) {
+      code = "406b";
+      return code;
+    }
     return await resultadoBusqueda[0];
   };
 
@@ -70,33 +84,36 @@ class ProductManager {
     return await product;
   };
 
-  updateProducto = (id, campo, valor) => {
-    this.#products = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
-    if (!this.#products.find((item) => item.id === id))
-      return console.log("No existe el producto");
-    let props = Object.keys(this.#products[0]);
-    if (!props.includes(campo)) return console.log("El campo no existe");
-    this.#products.forEach((item) => {
-      if (item.id === id) {
-        item[campo] = valor;
-        fs.writeFileSync(
-          this.#path,
-          JSON.stringify(this.#products, null, "\t")
-        );
-      }
-    });
-  };
-
-  deleteProducto = (id) => {
-    this.#products = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
-    if (!this.#products.find((item) => item.id === id))
-      return console.log("No existe el producto");
-    for (let i = 0; i < this.#products.length; i++) {
-      if (this.#products[i].id === id) {
-        this.#products.splice(i, 1);
+  updateProducto = async (id, mods) => {
+    let code = 0;
+    const data = await this.getProductos();
+    if (!data.find((item) => item.id === id))
+    {
+      code = 406;
+      return code;
+    }
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].id === id) {
+        data[i] = { ...data[i], ...mods };
+        fs.writeFileSync(this.#path, JSON.stringify(data, null, "\t"));
       }
     }
-    fs.writeFileSync(this.#path, JSON.stringify(this.#products, null, "\t"));
+  };
+
+  deleteProducto = async (id) => {
+    let code = 0;
+    const data = await this.getProductos();
+    if (!data.find((item) => item.id === id)) {
+      code = 406;
+      console.log(code);
+      return code;
+    }
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].id === id) {
+        data.splice(i, 1);
+      }
+    }
+    fs.writeFileSync(this.#path, JSON.stringify(data, null, "\t"));
   };
 }
 
@@ -105,4 +122,3 @@ const manager = new ProductManager();
 module.exports.fs = fs;
 module.exports.filename = filename;
 module.exports.manager = manager;
-
