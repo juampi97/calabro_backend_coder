@@ -1,6 +1,8 @@
-const { log } = require("console");
-const fs = require("fs");
-const fsp = require("node:fs/promises");
+
+// const fs = require("fs");
+// const fsp = require("node:fs/promises");
+
+import fs from "fs";
 
 const filename = "./products.json";
 
@@ -53,7 +55,7 @@ class ProductManager {
     if (!fs.existsSync(this.#path)) {
       return [];
     } else {
-      const data = await fsp.readFile(this.#path, "utf-8");
+      const data = await fs.promises.readFile(this.#path, "utf-8");
       if (data) {
         const products = JSON.parse(data);
         return await products;
@@ -120,6 +122,11 @@ class ProductManager {
 
 const manager = new ProductManager();
 
-module.exports.fs = fs;
-module.exports.filename = filename;
-module.exports.manager = manager;
+// module.exports.fs = fs;
+// module.exports.filename = filename;
+// module.exports.manager = manager;
+
+export { fs, filename, manager, ProductManager}
+
+
+
