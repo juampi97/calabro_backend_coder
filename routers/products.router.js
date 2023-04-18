@@ -8,7 +8,6 @@ router.get("/", (req, res) => {
   console.log(limit);
   manager.getProductos().then((data) => {
     if(data){
-
       !limit
       ? res.send({ status: "success", paiload: data })
       : res.send({ status: "success", paiload: data.slice(0, limit) });

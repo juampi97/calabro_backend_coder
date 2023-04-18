@@ -1,7 +1,3 @@
-
-// const fs = require("fs");
-// const fsp = require("node:fs/promises");
-
 import fs from "fs";
 
 const filename = "./products.json";
@@ -129,7 +125,7 @@ const manager = new ProductManager();
 // module.exports.filename = filename;
 // module.exports.manager = manager;
 
-export { fs, filename, manager, ProductManager}
+export { manager, ProductManager}
 
 
 
