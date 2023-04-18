@@ -17,12 +17,15 @@ class ProductManager {
   addProduct = async (product) => {
     let codigo = 0;
     let { title, description, price, thumbnail, code, stock } = product;
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
+    if (!title || !description || !price || !code || !stock) {
       codigo = "406a";
       return codigo;
     }
     let id = this.#generateId();
-    let producto = { id, ...product };
+    let producto = { id, ...product, status: true };
+    if(!thumbnail){
+    producto = { ...producto, thumbnail: [] };
+    }
     codigo = this.#saveFile(producto);
     return codigo;
   };
