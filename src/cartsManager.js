@@ -7,7 +7,7 @@ class CartsManger {
   #carts;
   constructor() {
     this.#carts = [];
-    this.#path = "./carts.json";
+    this.#path = "./src/carts.json";
   }
   addCart = async () => {
     let codigo = 0;
@@ -71,6 +71,28 @@ class CartsManger {
   getCarritoById = async (id) => {
     const product = await this.getCartById(id);
     return await product;
+  };
+
+  addProduct = async (cid, pid) => {
+    let code = 0;
+    const product = { id: pid, quantity: 1 };
+    const carts = await this.getCarritos();
+    carts.forEach((element) => {
+      if (element.id === cid) {
+        console.log(element);
+        if (element.products.find((item) => item.id === pid)) {
+          element.products.forEach((item) => {
+            if (item.id === pid) {
+              item.quantity += 1;
+              fs.writeFileSync(this.#path, JSON.stringify(carts, null, "\t"));
+            }
+          });
+        } else {
+          element.products = [...element.products, { id: pid, quantity: 1 }];
+          fs.writeFileSync(this.#path, JSON.stringify(carts, null, "\t"));
+        }
+      }
+    });
   };
 }
 

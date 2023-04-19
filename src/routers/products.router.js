@@ -5,7 +5,6 @@ const router = Router();
 
 router.get("/", (req, res) => {
   const limit = req.query.limit;
-  console.log(limit);
   manager.getProductos().then((data) => {
     if(data){
       !limit
@@ -64,7 +63,6 @@ router.put("/:pid", (req, res) => {
 router.delete("/:pid", (req, res) => {
   const id = parseInt(req.params.pid);
   manager.deleteProducto(id).then((data) => {
-    console.log(data);
     if (data == 406) {
       res.status(406).send({ status: "error", paiload: "El producto no existe" });
     } else {

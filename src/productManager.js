@@ -7,7 +7,7 @@ class ProductManager {
   #products;
   constructor() {
     this.#products = [];
-    this.#path = "./products.json";
+    this.#path = "./src/products.json";
   }
 
   addProduct = async (product) => {
@@ -34,7 +34,6 @@ class ProductManager {
     const data = await this.getProductos();
     if (data.find((item) => item.code === product.code)) {
       code = "406b";
-      console.log(code);
       return code;
     }
     data.push(product);
@@ -107,7 +106,6 @@ class ProductManager {
     const data = await this.getProductos();
     if (!data.find((item) => item.id === id)) {
       code = 406;
-      console.log(code);
       return code;
     }
     for (let i = 0; i < data.length; i++) {
