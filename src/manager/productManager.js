@@ -1,13 +1,13 @@
 import fs from "fs";
 
-const filename = "./products.json";
+const filename = "./data/products.json";
 
 class ProductManager {
   #path;
   #products;
   constructor() {
     this.#products = [];
-    this.#path = "./src/products.json";
+    this.#path = "./src/data/products.json";
   }
 
   addProduct = async (product) => {

@@ -1,13 +1,13 @@
 import fs from "fs";
 
-const filename = "./carts.json";
+const filename = "./data/carts.json";
 
 class CartsManger {
   #path;
   #carts;
   constructor() {
     this.#carts = [];
-    this.#path = "./src/carts.json";
+    this.#path = "./src/data/carts.json";
   }
   addCart = async () => {
     let codigo = 0;
