@@ -7,7 +7,7 @@ const code = document.querySelector("#code");
 const stock = document.querySelector("#stock");
 
 const btnDelete = document.querySelector("#btnDelete");
-const codeDelete = document.querySelector("#codeDelete");
+const id = document.querySelector("#id");
 
 const historyProducts = document.querySelector("#historyProducts");
 
@@ -26,7 +26,7 @@ btnCrear.addEventListener("click", () => {
 });
 
 btnDelete.addEventListener("click", () => {
-  socket.emit("delete-product", codeDelete.value);
+  socket.emit("delete-product", id.value);
 });
 
 socket.on("resp-new-product", (data) => {
