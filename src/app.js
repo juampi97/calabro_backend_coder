@@ -48,4 +48,17 @@ io.on("connection", (socket) => {
       }
     });
   });
+  socket.on('delete-product', (id) => {
+    manager.deleteProducto(parseInt(id)).then((data) => {
+      if (data == 406) {
+        socket.emit("resp-delete-product", "El producto no existe" );
+      } else {
+        manager.getProductos().then((data) => {
+          if (data) {
+            io.emit("resp-delete-product", data);
+          }
+        });
+      }
+    });
+  });
 });

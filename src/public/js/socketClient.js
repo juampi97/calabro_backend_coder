@@ -6,6 +6,9 @@ const thumbnail = document.querySelector("#thumbnail");
 const code = document.querySelector("#code");
 const stock = document.querySelector("#stock");
 
+const btnDelete = document.querySelector("#btnDelete");
+const codeDelete = document.querySelector("#codeDelete");
+
 const historyProducts = document.querySelector("#historyProducts");
 
 const socket = io();
@@ -22,7 +25,32 @@ btnCrear.addEventListener("click", () => {
   socket.emit("new-product", product);
 });
 
+btnDelete.addEventListener("click", () => {
+  socket.emit("delete-product", codeDelete.value);
+});
+
 socket.on("resp-new-product", (data) => {
+  if (typeof data == "string") {
+    alert(data);
+    return;
+  } else {
+    historyProducts.innerHTML = "";
+    data.reverse().forEach((element) => {
+      historyProducts.innerHTML += `
+            <div>
+                <h3>${element.title}</h3>
+                <p>${element.description}</p>
+                <p>${element.price}</p>
+                <p>${element.thumbnail}</p>
+                <p>${element.code}</p>
+                <p>${element.stock}</p>
+            </div>
+            `;
+    });
+  }
+});
+
+socket.on("resp-delete-product", (data) => {
   if (typeof data == "string") {
     alert(data);
     return;

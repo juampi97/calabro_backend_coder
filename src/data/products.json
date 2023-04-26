@@ -198,25 +198,5 @@
 		"code": "b102",
 		"stock": "10",
 		"status": true
-	},
-	{
-		"id": 22,
-		"title": "Remera",
-		"description": "Remera negra",
-		"price": "5000",
-		"thumbnail": "-",
-		"code": "q405",
-		"stock": "50",
-		"status": true
-	},
-	{
-		"id": 23,
-		"title": "Pantalon",
-		"description": "Pantalon largo",
-		"price": "10000",
-		"thumbnail": "-",
-		"code": "q4050",
-		"stock": "10",
-		"status": true
 	}
 ]
