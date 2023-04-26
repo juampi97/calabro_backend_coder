@@ -27,7 +27,6 @@ socket.on("resp-new-product", (data) => {
     alert(data);
     return;
   } else {
-    alert("Producto creado correctamente");
     historyProducts.innerHTML = "";
     data.reverse().forEach((element) => {
       historyProducts.innerHTML += `
