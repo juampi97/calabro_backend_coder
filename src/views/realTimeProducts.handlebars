@@ -1,0 +1,30 @@
+<div id="formContainer">
+  <h2>Productos en tiempo real</h2>
+  <div>Titulo:</div>
+  <div><input type="text" id="title" /></div>
+  <div>Description:</div>
+  <div><input type="text" id="description" /></div>
+  <div>Precio:</div>
+  <div><input type="text" id="price" /></div>
+  <div>Imagen:</div>
+  <div><input type="text" id="thumbnail" /></div>
+  <div>Codigo:</div>
+  <div><input type="text" id="code" /></div>
+  <div>Stock:</div>
+  <div><input type="text" id="stock" /></div>
+  <button id="btnCrear">Crear</button>
+</div>
+<div id="productsContainer">
+  <h2>Historial de productos</h2>
+  {{#each data}}
+    <div>
+      <h4>{{this.title}}</h4>
+      <p>{{this.description}}</p>
+      <p>{{this.price}}</p>
+    </div>
+  {{/each}}
+</div>
+
+<div id="history"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/socketClient.js"></script>
