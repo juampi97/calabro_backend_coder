@@ -148,5 +148,65 @@
 		"code": "a0160",
 		"stock": 10,
 		"status": true
+	},
+	{
+		"id": 17,
+		"title": "aa",
+		"description": "aa",
+		"price": "aa",
+		"thumbnail": "aa",
+		"code": "aa",
+		"stock": "aa",
+		"status": true
+	},
+	{
+		"id": 18,
+		"title": "Test",
+		"description": "Test",
+		"price": "Test",
+		"thumbnail": "Test",
+		"code": "Test",
+		"stock": "Test",
+		"status": true
+	},
+	{
+		"id": 19,
+		"title": "Remera",
+		"description": "Remera estampada",
+		"price": "1000",
+		"thumbnail": "-",
+		"code": "b100",
+		"stock": "10",
+		"status": true
+	},
+	{
+		"id": 20,
+		"title": "Remera",
+		"description": "Remera lisa",
+		"price": "1000",
+		"thumbnail": "-",
+		"code": "b101",
+		"stock": "10",
+		"status": true
+	},
+	{
+		"id": 21,
+		"title": "Remera",
+		"description": "Remera lisa",
+		"price": "1000",
+		"thumbnail": "-",
+		"code": "b102",
+		"stock": "10",
+		"status": true
+	},
+	{
+		"id": 22,
+		"title": "Remera",
+		"description": "Remera negra",
+		"price": "5000",
+		"thumbnail": "-",
+		"code": "q405",
+		"stock": "50",
+		"status": true
 	}
 ]

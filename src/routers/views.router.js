@@ -12,11 +12,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/realtimeproducts", (req, res) => {
-  manager.getProductos().then((data) => {
-    if (data) {
-      res.render("realtimeproducts", { data });
-    }
-  });
+  res.render("realtimeproducts", {});
 });
 
 export default router;

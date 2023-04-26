@@ -5,6 +5,7 @@ import productsRouter from "./routers/products.router.js";
 import cartsRouter from "./routers/carts.router.js";
 import viewsRouter from "./routers/views.router.js";
 import { Server } from "socket.io";
+import { manager } from "./manager/productManager.js";
 
 const app = express();
 app.use(express.json());
@@ -16,10 +17,10 @@ const httpServer = app.listen(8080, () =>
 const io = new Server(httpServer);
 
 app.engine("handlebars", handlebars.engine());
-app.set("views", __dirname+"/views");
+app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-app.use(express.static(__dirname+"/public"));
+app.use(express.static(__dirname + "/public"));
 
 app.use("/", viewsRouter);
 app.use("/api/products/", productsRouter);
@@ -27,8 +28,24 @@ app.use("/api/carts/", cartsRouter);
 
 io.on("connection", (socket) => {
   console.log("Nuevo cliente conectado!");
+  manager.getProductos().then((data) => {
+    if (data) {
+      io.emit("resp-new-product", data);
+    }
+  });
   socket.on("new-product", (data) => {
-    console.log(data);
-    io.emit("new-product", data);
+    manager.addProduct(data).then((data) => {
+      if (data == "406b") {
+        socket.emit("resp-new-product", "El producto ya existe" );
+      } else if (data == "406a") {
+        socket.emit("resp-new-product", "Todos los campos son obligatorios" );
+      } else {
+        manager.getProductos().then((data) => {
+          if (data) {
+            io.emit("resp-new-product", data);
+          }
+        });
+      }
+    });
   });
 });

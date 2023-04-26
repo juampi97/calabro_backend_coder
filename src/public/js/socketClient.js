@@ -1,25 +1,45 @@
+const btnCrear = document.querySelector("#btnCrear");
+const title = document.querySelector("#title");
+const description = document.querySelector("#description");
+const price = document.querySelector("#price");
+const thumbnail = document.querySelector("#thumbnail");
+const code = document.querySelector("#code");
+const stock = document.querySelector("#stock");
+
+const historyProducts = document.querySelector("#historyProducts");
+
 const socket = io();
 
-const btnCrear = document.querySelector('#btnCrear');
-const title = document.querySelector('#title');
-const description = document.querySelector('#description');
-const price = document.querySelector('#price');
-const thumbnail = document.querySelector('#thumbnail');
-const code = document.querySelector('#code');
-const stock = document.querySelector('#stock');
+btnCrear.addEventListener("click", () => {
+  let product = {
+    title: title.value,
+    description: description.value,
+    price: price.value,
+    thumbnail: thumbnail.value,
+    code: code.value,
+    stock: stock.value,
+  };
+  socket.emit("new-product", product);
+});
 
-btnCrear.addEventListener('click', () => {
-    if (!title.value || !description.value || !price.value || !thumbnail.value || !code.value || !stock.value) {
-        alert('Todos los campos son obligatorios');
-        return;
-    }
-    let product = {
-        title: title.value,
-        description: description.value,
-        price: price.value,
-        thumbnail: thumbnail.value,
-        code: code.value,
-        stock: stock.value
-    }
-    socket.emit('new-product', product);
-})
+socket.on("resp-new-product", (data) => {
+  if (typeof data == "string") {
+    alert(data);
+    return;
+  } else {
+    alert("Producto creado correctamente");
+    historyProducts.innerHTML = "";
+    data.reverse().forEach((element) => {
+      historyProducts.innerHTML += `
+            <div>
+                <h3>${element.title}</h3>
+                <p>${element.description}</p>
+                <p>${element.price}</p>
+                <p>${element.thumbnail}</p>
+                <p>${element.code}</p>
+                <p>${element.stock}</p>
+            </div>
+            `;
+    });
+  }
+});
