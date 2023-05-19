@@ -4,6 +4,7 @@ import { Router } from "express";
 
 const router = Router();
 
+/*
 router.post("/", (req, res) => {
   manager.addCart().then((data) => {
     if (data == 201) {
@@ -58,5 +59,8 @@ router.post("/:cid/product/:pid", (req, res) => {
     }
   });
 });
+*/
+
+
 
 export default router;

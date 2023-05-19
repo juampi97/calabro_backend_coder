@@ -6,15 +6,19 @@ import cartsRouter from "./routers/carts.router.js";
 import viewsRouter from "./routers/views.router.js";
 import { Server } from "socket.io";
 import { manager } from "./manager/productManager.js";
+import mongoose from "mongoose";
+
+const uri = "mongodb+srv://coderhouse:coderhouse@cluster0.2x8nri1.mongodb.net/"
 
 const app = express();
 app.use(express.json());
 
-const httpServer = app.listen(8080, () =>
+/*const httpServer = app.listen(8080, () =>
   console.log("Servidor escuchando en el puerto 8080")
 );
+*/
 
-const io = new Server(httpServer);
+//const io = new Server(httpServer);
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
@@ -26,6 +30,7 @@ app.use("/", viewsRouter);
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
 
+/*
 io.on("connection", (socket) => {
   console.log("Nuevo cliente conectado!");
   manager.getProductos().then((data) => {
@@ -62,3 +67,14 @@ io.on("connection", (socket) => {
     });
   });
 });
+*/
+
+mongoose.set('strictQuery', false)
+
+try {
+  await mongoose.connect(uri)
+  console.log('DB connected!')
+  app.listen(8080, () => console.log('Server up'))
+} catch (err) {
+  console.log('No se puede conectar a la BD')
+}
