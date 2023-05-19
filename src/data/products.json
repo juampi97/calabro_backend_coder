@@ -128,5 +128,45 @@
 		"code": "a0150",
 		"stock": "10",
 		"status": true
+	},
+	{
+		"id": 16,
+		"title": "Remera",
+		"description": "Remera de algodon",
+		"price": 3000,
+		"thumbnail": "-",
+		"code": "a9999",
+		"stock": 10,
+		"status": true
+	},
+	{
+		"id": 17,
+		"title": "Pantalon",
+		"description": "Pantalon de Jean",
+		"price": 10000,
+		"thumbnail": "-",
+		"code": "a9998",
+		"stock": 10,
+		"status": true
+	},
+	{
+		"id": 18,
+		"title": "Campera",
+		"description": "Campera de Cuero",
+		"price": 25000,
+		"thumbnail": "-",
+		"code": "a9997",
+		"stock": 5,
+		"status": true
+	},
+	{
+		"id": 19,
+		"title": "Remera",
+		"description": "Remera lisa",
+		"price": 2000,
+		"thumbnail": "-",
+		"code": "a9996",
+		"stock": 15,
+		"status": true
 	}
 ]

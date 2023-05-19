@@ -1,22 +1,10 @@
-import { manager } from "../manager/productManager.js";
+import { manager } from "../manager/db/productManager.js";
 import { Router } from "express";
-import  productModel  from "../model/products.model.js"
+import productModel from "../model/products.model.js";
 
 const router = Router();
 
 /*
-router.get("/", (req, res) => {
-  const limit = req.query.limit;
-  manager.getProductos().then((data) => {
-    if(data){
-      !limit
-      ? res.send({ status: "success", paiload: data })
-      : res.send({ status: "success", paiload: data.slice(0, limit) });
-    } else {
-      res.status(406).send({ status: "error", paiload: "No hay productos" });
-    }
-  });
-});
 
 router.get("/:pid", (req, res) => {
   const id = parseInt(req.params.pid);
@@ -27,22 +15,6 @@ router.get("/:pid", (req, res) => {
       res.status(406).send({ status: "error", paiload: "No existe el producto" });
     } else {
       res.send({ status: "success", paiload: data });
-    }
-  });
-});
-
-router.post("/", (req, res) => {
-  const product = req.body;
-  if ("id" in product) {
-    delete product.id;
-  }
-  manager.addProduct(product).then((data) => {
-    if (data == "406b") {
-      res.status(406).send({ status: "error", paiload: "El producto ya existe" });
-    } else if (data == "406a") {
-      res.status(406).send({ status: "error", paiload: "Complete todos los campos" });
-    } else {
-      res.status(201).send({ status: "success", paiload: "Producto agregado" });
     }
   });
 });
@@ -74,36 +46,34 @@ router.delete("/:pid", (req, res) => {
 });
 */
 
-router.get('/', async (req,res)=>{
-  try{
-    let products = await productModel.find()
-    console.log(products);
-    res.send({result: "succes", payload: products})
-  }catch(err){
-    console.log("Cannot get products with mongoose: "+err);
-  }
-})
+router.get("/", async (req, res) => {
+  const limit = req.query.limit;
+  const page = req.query.page;
+  const query = req.query.query;
+  const filter = req.query.filter;
+  const sort = req.query.sort;
+  manager.getProducts(limit, page, query, filter, sort).then((data) => {
+    if (data) {
+      res.send({ status: "success", paiload: data });
+    } else {
+      res.status(406).send({ status: "error", paiload: "No hay productos" });
+    }
+  });
+});
 
 router.post("/", async (req, res) => {
   const product = req.body;
-  let { title, description, price, thumbnail, code, stock } = product;
   manager.addProduct(product).then((data) => {
     if (data == "406b") {
-      res.status(406).send({ status: "error", paiload: "El producto ya existe" });
+      res
+        .status(406)
+        .send({ status: "error", paiload: "El producto ya existe" });
     } else if (data == "406a") {
-      res.status(406).send({ status: "error", paiload: "Complete todos los campos" });
+      res
+        .status(406)
+        .send({ status: "error", paiload: "Complete todos los campos" });
     } else {
-      //res.status(201).send({ status: "success", paiload: "Producto agregado" });
-      let result = productModel.create({
-        title,
-        description,
-        price,
-        thumbnail,
-        code,
-        stock
-        //status
-      })
-      res.send({result: "succes", payload: result})
+      res.send({ result: "succes", payload: data });
     }
   });
 });
