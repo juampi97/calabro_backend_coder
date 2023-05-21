@@ -1,6 +1,5 @@
 import { manager } from "../manager/db/productManager.js";
 import { Router } from "express";
-import productModel from "../model/products.model.js";
 
 const router = Router();
 
@@ -77,5 +76,7 @@ router.post("/", async (req, res) => {
     }
   });
 });
+
+router.delete
 
 export default router;

@@ -7,6 +7,7 @@ import viewsRouter from "./routers/views.router.js";
 import { Server } from "socket.io";
 import { manager } from "./manager/productManager.js";
 import mongoose from "mongoose";
+import productModel from "./model/products.model.js"; 
 
 const uri = "mongodb+srv://coderhouse:coderhouse@cluster0.2x8nri1.mongodb.net/"
 

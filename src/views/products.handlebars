@@ -1,0 +1,10 @@
+<div id="productsContainer">
+    {{#each data}}
+    <div>
+        <h3>{{this.title}}</h3>
+        <p>{{this.description}}</p>
+        <p>${{this.price}}</p>
+        <button id="{{this._id}}"> Add</button>
+    </div>
+    {{/each}}
+</div>

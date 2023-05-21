@@ -35,6 +35,34 @@ class ProductManager {
     }
   };
 
+  getProductsView = async (limit, page, query, filter, sort) => {
+    let products = [];
+    let ordenar = 0;
+    if(sort == "desc") {
+      ordenar = -1;
+    } else if(sort == "asc") {
+      ordenar = 1;
+    } else {
+      sort = 0;
+    }
+    try {
+      if(query && filter) {
+        if(query === "title") {
+          !sort ? products = await productModel.find({title: filter}).lean().exec() : products = await productModel.find({title: filter}).sort({price: ordenar}).lean().exec();
+        } else if(query === "status"){
+          !sort ? products = await productModel.find({status: filter}).lean().exec(): products = await productModel.find({status: filter}).sort({price: ordenar}).lean().exec();
+        }
+      } else {
+          !sort ? products = await productModel.find().lean().exec() : products = await productModel.find().sort({price: ordenar}).lean().exec();
+      }
+      !page ?   products = products.slice(0, 10) : products = products.slice(10*page, 10*page+10);
+      !limit ?  products = products.slice(0, 10) : products = products.slice(0, limit);     
+      return products;
+    } catch (err) {
+      console.log("Cannot get products with mongoose: " + err);
+    }
+  };
+
   addProduct = async (product) => {
     let codigo = 0;
     let { title, description, price, thumbnail, code, stock } = product;
@@ -64,49 +92,12 @@ class ProductManager {
   };
 
   getProductById = async (id) => {
-    let code = 0;
-    if (!fs.existsSync(this.#path)) {
-      code = "406a";
-      return code;
-    }
-    const products = await this.getProductos();
-    let resultadoBusqueda = products.filter((item) => item.id === id);
-    if (resultadoBusqueda.length === 0) {
-      code = "406b";
-      return code;
-    }
-    return await resultadoBusqueda[0];
+    let data
+    let product = await productModel.findOne({ _id: id });
+    !product ? (data = "406") : (data = product);
+    return data;
   };
-
-  updateProducto = async (id, mods) => {
-    let code = 0;
-    const data = await this.getProductos();
-    if (!data.find((item) => item.id === id)) {
-      code = 406;
-      return code;
-    }
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].id === id) {
-        data[i] = { ...data[i], ...mods };
-        fs.writeFileSync(this.#path, JSON.stringify(data, null, "\t"));
-      }
-    }
-  };
-
-  deleteProducto = async (id) => {
-    let code = 0;
-    const data = await this.getProductos();
-    if (!data.find((item) => item.id === id)) {
-      code = 406;
-      return code;
-    }
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].id === id) {
-        data.splice(i, 1);
-      }
-    }
-    fs.writeFileSync(this.#path, JSON.stringify(data, null, "\t"));
-  };
+  
 }
 
 const manager = new ProductManager();

@@ -1,4 +1,3 @@
-import { Int32 } from "bson";
 import mongoose from "mongoose";
 
 const productCollection = "products";
