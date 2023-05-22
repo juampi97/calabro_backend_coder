@@ -17,7 +17,8 @@
     "express-handlebars": "^7.0.7",
     "mongodb": "^5.5.0",
     "mongoose": "^7.1.2",
-    "socket.io": "^4.6.1"
+    "socket.io": "^4.6.1",
+    "sweetalert2": "^11.4.8"
   },
   "engines": {
     "node": ">=14.17.6"

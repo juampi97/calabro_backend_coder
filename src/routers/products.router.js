@@ -77,6 +77,6 @@ router.post("/", async (req, res) => {
   });
 });
 
-router.delete
+// router.delete
 
 export default router;
