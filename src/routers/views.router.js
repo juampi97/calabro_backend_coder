@@ -17,15 +17,32 @@ router.get("/realtimeproducts", (req, res) => {
 });
 */
 
+router.get("/", (req, res) => {
+  manager.getProductosView().then((data) => {
+    if (data) {
+      res.send({ status: "success", paiload: data });
+    }
+  });
+});
+
 router.get("/products", async (req, res) => {
   const limit = req.query.limit;
   const page = req.query.page;
   const query = req.query.query;
-  const filter = req.query.filter;
   const sort = req.query.sort;
-  manager.getProductsView(limit, page, query, filter, sort).then((data) => {
+
+  let limite="", consulta="", orden="";
+  if (limit) limite = `&limit=${limit}`;
+  if (query) consulta = `&query=${query}`;
+  if (sort) orden = `&sort=${sort}`;
+
+  manager.getProductosView(limit, page, query, sort).then((data) => {
     if (data) {
-      res.render("products", { data });
+      let prevLink = '';
+      let nextLink = '';
+      data.hasPrevPage ? prevLink = `/products?page=${data.prevPage}${limite}${consulta}${orden}` : prevLink = ''
+      data.hasNextPage ? nextLink = `/products?page=${data.nextPage}${limite}${consulta}${orden}` : nextLink = ''
+      res.render("products", { data, prevLink, nextLink });
     }
   });
 });

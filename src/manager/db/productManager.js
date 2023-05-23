@@ -35,32 +35,40 @@ class ProductManager {
     }
   };
 
-  getProductsView = async (limit, page, query, filter, sort) => {
-    let products = [];
-    let ordenar = 0;
+  getProductosView = async (limit, page, query, sort) => {
+    limit? limit = limit : limit = 10;
+    page? page = page : page = 1;
     if(sort == "desc") {
-      ordenar = -1;
+      sort = -1;
     } else if(sort == "asc") {
-      ordenar = 1;
+      sort = 1;
     } else {
       sort = 0;
     }
-    try {
-      if(query && filter) {
-        if(query === "title") {
-          !sort ? products = await productModel.find({title: filter}).lean().exec() : products = await productModel.find({title: filter}).sort({price: ordenar}).lean().exec();
-        } else if(query === "status"){
-          !sort ? products = await productModel.find({status: filter}).lean().exec(): products = await productModel.find({status: filter}).sort({price: ordenar}).lean().exec();
-        }
-      } else {
-          !sort ? products = await productModel.find().lean().exec() : products = await productModel.find().sort({price: ordenar}).lean().exec();
-      }
-      !page ?   products = products.slice(0, 10) : products = products.slice(10*page, 10*page+10);
-      !limit ?  products = products.slice(0, 10) : products = products.slice(0, limit);     
-      return products;
-    } catch (err) {
-      console.log("Cannot get products with mongoose: " + err);
+    let result = [];
+    if(query == "true" || query == "false") {
+      result = await productModel.paginate({status:query}, {
+        limit: limit, 
+        page: page, 
+        sort: {price: sort},
+        lean: true
+      });
+    } else if(query) { 
+      result = await productModel.paginate({title:query}, {
+        limit: limit, 
+        page: page, 
+        sort: {price: sort},
+        lean: true
+      });
+    } else {
+      result = await productModel.paginate({}, {
+        limit: limit, 
+        page: page, 
+        sort: {price: sort},
+        lean: true
+      });
     }
+      return result;
   };
 
   addProduct = async (product) => {

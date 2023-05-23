@@ -1,10 +1,21 @@
 <div id="productsContainer">
-    {{#each data}}
+  {{#each data.docs}}
     <div>
-        <h3>{{this.title}}</h3>
-        <p>{{this.description}}</p>
-        <p>${{this.price}}</p>
-        <button id="{{this._id}}"> Add</button>
+      <h3>{{this.title}}</h3>
+      <p>{{this.description}}</p>
+      <p>${{this.price}}</p>
+      <button id="{{this._id}}"> Add</button>
     </div>
-    {{/each}}
+  {{/each}}
+
+  <div>
+        {{#if data.hasPrevPage}}
+            <a href="{{prevLink}}">Anterior</a>
+        {{/if}}
+        | 
+        {{#if data.hasNextPage}}
+            <a href="{{nextLink}}">Siguiente</a>
+        {{/if}}
+  </div>
+  
 </div>
