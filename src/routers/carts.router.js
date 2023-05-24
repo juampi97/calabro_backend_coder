@@ -35,11 +35,113 @@ router.post("/:cid/product/:pid", (req, res) => {
   const pid = req.params.pid;
   cManager.addProductToCart(cid, pid).then((data) => {
     if (data == "406") {
-      res.send({ result: "error", payload: "No se pudo agregar el producto al carrito." });
+      res.send({
+        result: "error",
+        payload: "No se pudo agregar el producto al carrito.",
+      });
     } else {
       res.send({ result: "succes", payload: data });
     }
   });
+});
+
+router.delete("/:cid/product/:pid", (req, res) => {
+  const cid = req.params.cid;
+  const pid = req.params.pid;
+  cManager.deleteProductToCart(cid, pid).then((data) => {
+    if (data == "406") {
+      res.send({
+        result: "error",
+        payload: "No se pudo eliminar el producto al carrito.",
+      });
+    } else {
+      res.send({ result: "succes", payload: data });
+    }
+  });
+});
+
+router.delete("/:cid", (req, res) => {
+  const cid = req.params.cid;
+  cManager.resetCart(cid).then((data) => {
+    if (data == "406") {
+      res.send({
+        result: "error",
+        payload: "No se pudo eliminar el producto al carrito.",
+      });
+    } else {
+      res.send({ result: "succes", payload: data });
+    }
+  });
+});
+
+router.put("/:cid", (req, res) => {
+  const cid = req.params.cid;
+  const arrayBody = req.body;
+  // if (arrayBody.hasOwnProperty("product") && arrayBody.hasOwnProperty("qty")) {
+  if (arrayBody.length > 0) {
+    let format = true;
+    for (let i = 0; i < arrayBody.length; i++) {
+      if (
+        !arrayBody[i].hasOwnProperty("product") ||
+        !arrayBody[i].hasOwnProperty("qty")
+      ) {
+        format = false;
+        break;
+      }
+    }
+    if (!format) {
+      res.send({
+        result: "error",
+        payload: "No se pudo actualizar el producto al carrito.",
+      });
+    } else {
+      cManager.updateAllCart(cid, arrayBody).then((data) => {
+        if (data == "406") {
+          res.send({
+            result: "error",
+            payload: "No se pudo actualizar el producto al carrito.",
+          });
+        } else {
+          res.send({ result: "succes", payload: "Carrito actualizado" });
+        }
+      });
+    }
+  } else {
+    res.send({
+      result: "error",
+      payload: "No se pudo actualizar el producto al carrito.",
+    });
+  }
+});
+
+router.put("/:cid/product/:pid", (req, res) => {
+  const cid = req.params.cid;
+  const pid = req.params.pid;
+  const body = req.body;
+  if (!body.hasOwnProperty("qty")) {
+    res.send({
+      result: "error",
+      payload: "No se pudo actualizar el producto al carrito.",
+    });
+  } else {
+    if(body.qty < 1){
+      res.send({
+        result: "error",
+        payload: "No se pudo actualizar el producto al carrito.",
+      });
+    } else {
+      cManager.updateOneItemCart(cid, pid, body).then((data) => {
+        if(data == 406){
+          res.send({
+            result: "error",
+            payload: "No se pudo actualizar el producto al carrito.",
+          });
+        } else {
+          res.send({ result: "succes", payload: "Carrito actualizado" });
+        }
+      });
+    }
+  }
 });
 
 export default router;
