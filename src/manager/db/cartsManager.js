@@ -65,9 +65,8 @@ class CartsManger {
           cart.products.push({ product: pid });
         }
         const result = await cartModel.updateOne({ _id: cid }, cart);
+        return result;
       }
-
-      return "200";
     } catch (err) {
       console.log("Cannot get carts with mongoose: " + err);
       return "406";
@@ -85,8 +84,7 @@ class CartsManger {
       cart.products.splice(pIndex, 1);
 
       const result = await cartModel.updateOne({ _id: cid }, cart);
-
-      return "200";
+      return result;
     } catch (err) {
       console.log("Cannot get carts with mongoose: " + err);
       return "406";
@@ -100,8 +98,7 @@ class CartsManger {
       cart.products.splice(0, cart.products.length);
 
       const result = await cartModel.updateOne({ _id: cid }, cart);
-
-      return "200";
+      return result;
     } catch (err) {
       console.log("Cannot get carts with mongoose: " + err);
       return "406";
@@ -144,7 +141,7 @@ class CartsManger {
 
       if (control) {
         let result = await cartModel.updateOne({ _id: cid }, cart);
-        return "200";
+        return result;
       } else {
         return "406";
       }
@@ -166,7 +163,7 @@ class CartsManger {
         }
       }
       let result = await cartModel.updateOne({ _id: cid }, cart);
-      return "200";
+      return result;
     } catch (err) {
       console.log("Cannot get carts with mongoose: " + err);
       return "406";

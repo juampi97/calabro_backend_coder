@@ -102,7 +102,7 @@ router.put("/:cid", (req, res) => {
             payload: "No se pudo actualizar el producto al carrito.",
           });
         } else {
-          res.send({ result: "succes", payload: "Carrito actualizado" });
+          res.send({ result: "succes", payload: data });
         }
       });
     }
@@ -137,7 +137,7 @@ router.put("/:cid/product/:pid", (req, res) => {
             payload: "No se pudo actualizar el producto al carrito.",
           });
         } else {
-          res.send({ result: "succes", payload: "Carrito actualizado" });
+          res.send({ result: "succes", payload: data });
         }
       });
     }

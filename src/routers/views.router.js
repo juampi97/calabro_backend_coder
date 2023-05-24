@@ -52,7 +52,6 @@ router.get("/carts/:cid", (req, res) => {
   const cid = req.params.cid;
   cManager.getCartByIdView(cid).then((data) => {
     if (data) {
-      console.log(data.products);
       res.render("cart", { cid, data });
     }
   });
