@@ -34,6 +34,16 @@ class CartsManger {
     }
   };
 
+  getCartByIdView = async (id) => {
+    try {
+      // let cart = await cartModel.findOne({_id: id}).populate("products.product");
+      let cart = await cartModel.findOne({ _id: id }).lean();
+      return cart;
+    } catch (err) {
+      return "406";
+    }
+  };
+
   addProductToCart = async (cid, pid) => {
     try {
       let product = await productModel.findOne({ _id: pid });

@@ -1,5 +1,6 @@
 import express from "express";
 import { manager } from "../manager/db/productManager.js";
+import { manager as cManager } from "../manager/db/cartsManager.js";
 
 const router = express.Router();
 
@@ -43,6 +44,16 @@ router.get("/products", async (req, res) => {
       data.hasPrevPage ? prevLink = `/products?page=${data.prevPage}${limite}${consulta}${orden}` : prevLink = ''
       data.hasNextPage ? nextLink = `/products?page=${data.nextPage}${limite}${consulta}${orden}` : nextLink = ''
       res.render("products", { data, prevLink, nextLink });
+    }
+  });
+});
+
+router.get("/carts/:cid", (req, res) => {
+  const cid = req.params.cid;
+  cManager.getCartByIdView(cid).then((data) => {
+    if (data) {
+      console.log(data.products);
+      res.render("cart", { cid, data });
     }
   });
 });
