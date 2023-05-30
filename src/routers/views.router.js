@@ -1,29 +1,12 @@
 import express from "express";
 import { manager } from "../manager/db/productManager.js";
 import { manager as cManager } from "../manager/db/cartsManager.js";
+import userModel from "../model/user.model.js";
 
 const router = express.Router();
 
-/*
 router.get("/", (req, res) => {
-  manager.getProductos().then((data) => {
-    if (data) {
-      res.render("home", { data });
-    }
-  });
-});
-
-router.get("/realtimeproducts", (req, res) => {
-  res.render("realTimeProducts", {});
-});
-*/
-
-router.get("/", (req, res) => {
-  manager.getProductosView().then((data) => {
-    if (data) {
-      res.send({ status: "success", paiload: data });
-    }
-  });
+  res.redirect("session/login");
 });
 
 router.get("/products", async (req, res) => {
@@ -32,18 +15,46 @@ router.get("/products", async (req, res) => {
   const query = req.query.query;
   const sort = req.query.sort;
 
-  let limite="", consulta="", orden="";
+  if( !req.session.email ) return res.render("errors/base", { error: "No tienes los permisos para acceder a esta seccion." });
+
+  const mail = req.session.email;
+  const user = await userModel.findOne({ email: mail }).lean().exec();
+  const nombre = user.first_name;
+  const apellido = user.last_name;
+  let rol = "";
+
+  if (mail == "adminCoder@coder.com") {
+    rol = "admin";
+  } else {
+    rol = "User";
+  }
+
+  let limite = "",
+    consulta = "",
+    orden = "";
   if (limit) limite = `&limit=${limit}`;
   if (query) consulta = `&query=${query}`;
   if (sort) orden = `&sort=${sort}`;
 
   manager.getProductosView(limit, page, query, sort).then((data) => {
     if (data) {
-      let prevLink = '';
-      let nextLink = '';
-      data.hasPrevPage ? prevLink = `/products?page=${data.prevPage}${limite}${consulta}${orden}` : prevLink = ''
-      data.hasNextPage ? nextLink = `/products?page=${data.nextPage}${limite}${consulta}${orden}` : nextLink = ''
-      res.render("products", { data, prevLink, nextLink });
+      let prevLink = "";
+      let nextLink = "";
+      data.hasPrevPage
+        ? (prevLink = `/products?page=${data.prevPage}${limite}${consulta}${orden}`)
+        : (prevLink = "");
+      data.hasNextPage
+        ? (nextLink = `/products?page=${data.nextPage}${limite}${consulta}${orden}`)
+        : (nextLink = "");
+      res.render("products", {
+        data,
+        prevLink,
+        nextLink,
+        mail,
+        nombre,
+        apellido,
+        rol
+      });
     }
   });
 });
