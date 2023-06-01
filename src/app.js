@@ -1,5 +1,5 @@
 import express from "express";
-import __dirname from "./utils.js";
+import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import productsRouter from "./routers/products.router.js";
@@ -19,6 +19,9 @@ import MongoStore from "connect-mongo";
 
 import cookieParser from "cookie-parser";
 
+import passport from "passport"
+import initializePassport from "./config/passport.config.js";
+
 const uri = "mongodb+srv://coderhouse:coderhouse@cluster0.2x8nri1.mongodb.net/";
 
 const app = express();
@@ -36,6 +39,10 @@ app.use((session({
    resave: true,
    saveUninitialized: true 
 })));
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
