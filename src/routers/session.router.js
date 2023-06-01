@@ -14,19 +14,15 @@ router.get("/register", (req, res) => {
   }
 });
 
-router.post("/register", async (req, res) => {
-  const { first_name, last_name, email, age, password } = req.body;
-  let userNew = {
-    first_name,
-    last_name,
-    email,
-    age,
-    password: createHash(password),
-  };
-  const user = await userModel.create(userNew);
-  await user.save();
-  res.redirect("/");
-});
+router.post('/register', 
+    passport.authenticate('register', { failureRedirect: '/session/failureRegister'}), 
+    async(req, res) => {
+    res.redirect('/session/login')
+})
+
+router.get('/failureRegister', (req, res) => {
+    res.render('errors/base', { error: 'No se pudo registrar el usuario, el email ya existe.' })
+})
 
 router.get("/login", (req, res) => {
   const email = req.session.email;
@@ -37,25 +33,26 @@ router.get("/login", (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  const user = await userModel
-    .findOne({ email: email })
-    .lean()
-    .exec();
-  if (!user) {
-    return res
-      .status(401)
-      .render("errors/base", { error: "Invalid email or password" });
-  }
-  if(!isValidPassword(user, password)) {
-    return res
-      .status(401)
-      .render("errors/base", { error: "Invalid email or password" });
-  }
-  req.session.email = user.email;
-  res.redirect("/products");
-});
+router.post('/login', 
+    passport.authenticate('login', {failureRedirect: '/session/failLogin'}),
+    async (req, res) => {
+    
+    if (!req.user) {
+        return res.status(400).send({ status: 'error', error: 'Invalid credentials'})
+    }
+
+    req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        email: req.user.email,
+        age: req.user.age
+    }
+    res.redirect('/products')
+})
+
+router.get('/failLogin', (req, res) => {
+  res.render('errors/base', { error: 'No se pudo iniciar sesión. Usuario o contraseña incorrecto.' })
+})
 
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {

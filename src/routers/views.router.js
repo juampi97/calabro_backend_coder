@@ -15,12 +15,11 @@ router.get("/products", async (req, res) => {
   const query = req.query.query;
   const sort = req.query.sort;
 
-  if( !req.session.email ) return res.render("errors/base", { error: "No tienes los permisos para acceder a esta seccion." });
+  if( !req.session.user ) return res.render("errors/base", { error: "No tienes los permisos para acceder a esta seccion." });
 
-  const mail = req.session.email;
-  const user = await userModel.findOne({ email: mail }).lean().exec();
-  const nombre = user.first_name;
-  const apellido = user.last_name;
+  const mail = req.session.user.email;
+  const nombre = req.session.user.first_name;
+  const apellido = req.session.user.last_name;
   let rol = "";
 
   if (mail == "adminCoder@coder.com") {
