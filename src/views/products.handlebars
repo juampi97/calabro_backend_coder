@@ -1,7 +1,9 @@
 <script>
-  function addProduct(id) { let cartId = prompt('Ingrese id carrito:')
-  fetch(`http://localhost:8080/api/carts/${cartId}/product/${id}`, { method:
-  "post" }) window.location.href = 'http://localhost:8080/products' }
+  function addProduct(id) { 
+    let cartId = prompt('Ingrese id carrito:')
+    fetch(`http://localhost:8080/api/carts/${cartId}/product/${id}`,{ method:"post" }) 
+    window.location.href = 'http://localhost:8080/products' 
+  }
 </script>
 
 <div class="container">
@@ -26,9 +28,9 @@
                 <td>{{this.title}}</td>
                 <td>{{this.description}}</td>
                 <td>${{this.price}}</td>
-                <td><button
-                    onclick="addProduct('{{this._id}}')"
-                  >Add</button></td>
+                <td>
+                  <button onclick="addProduct('{{this._id}}')">Add</button>
+                </td>
               </tr>
             {{/each}}
           </tbody>

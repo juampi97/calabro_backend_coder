@@ -20,13 +20,7 @@ router.get("/", async (req, res) => {
   const mail = req.user.user.email;
   const nombre = req.user.user.first_name;
   const apellido = req.user.user.last_name;
-  let rol = "";
-
-  if (mail == "adminCoder@coder.com") {
-    rol = "admin";
-  } else {
-    rol = "User";
-  }
+  let rol = req.user.user.role;
 
   let limite = "",
     consulta = "",
