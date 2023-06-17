@@ -4,30 +4,58 @@
   "post" }) window.location.href = 'http://localhost:8080/products' }
 </script>
 
-  <div>
-    <h1>Bienvenido {{nombre}} {{apellido}}</h1>
-    <h4>Rol:{{rol}}</h4>
-  </div>
-  <div>
-    <h2>Listado de productos</h2>
-  </div>
-  <div id="productsContainer">
-    {{#each data.docs}}
-      <div>
-        <h3>{{this.title}}</h3>
-        <p>{{this.description}}</p>
-        <p>${{this.price}}</p>
-        <button onclick="addProduct('{{this._id}}')">Add</button>
-      </div>
-    {{/each}}
-
+<div class="container">
+  <div class="d-flex flex-column">
     <div>
-      {{#if data.hasPrevPage}}
-        <a href="{{prevLink}}">Anterior</a>
-      {{/if}}
-      |
-      {{#if data.hasNextPage}}
-        <a href="{{nextLink}}">Siguiente</a>
-      {{/if}}
+      <h2 class="mt-2 text-center">Bienvenido {{nombre}} {{apellido}}</h2>
+      <h5 class="text-center">Rol:{{rol}}</h5>
+    </div>
+    <div class="d-flex flex-row justify-content-around">
+      <div class="col-8">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Producto</th>
+              <th scope="col">Descripcion</th>
+              <th scope="col">Precio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each data.docs}}
+              <tr>
+                <td>{{this.title}}</td>
+                <td>{{this.description}}</td>
+                <td>${{this.price}}</td>
+                <td><button
+                    onclick="addProduct('{{this._id}}')"
+                  >Add</button></td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="d-flex flex-row justify-content-around">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item {{#if data.hasPrevPage}}{{else}}disabled{{/if}}">
+            <a class="page-link" href="{{prevLink}}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          {{#each front_pagination}}
+            <li class="page-item {{#if this.active}}active{{/if}}">
+                <a class="page-link" href="/products?page={{this.page}}">{{this.page}}</a>
+            </li>
+          {{/each}}
+          <li class="page-item {{#if data.hasNextPage}}{{else}}disabled{{/if}}">
+            <a class="page-link" href="{{nextLink}}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
+
+</div>

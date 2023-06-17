@@ -55,7 +55,6 @@ app.use("/" ,viewsRouter);
 app.use("/chat", chatRouter);
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
-app.use("/api/carts/", cartsRouter);
 app.use("/session/", sessionRouter);
 app.use("/products", passportCall('jwt') , productViewsRouter)
 
