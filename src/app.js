@@ -29,7 +29,7 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 
-app.use(cookieParser());
+app.use(cookieParser("S3crEt"));
 app.use((session({
   store: MongoStore.create({ 
     mongoUrl: uri,
@@ -57,45 +57,6 @@ app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
 app.use("/session/", sessionRouter);
 app.use("/products", passportCall('jwt') , productViewsRouter)
-
-/*
-io.on("connection", (socket) => {
-  console.log("Nuevo cliente conectado!");
-  manager.getProductos().then((data) => {
-    if (data) {
-      io.emit("resp-new-product", data);
-    }
-  });
-  socket.on("new-product", (data) => {
-    manager.addProduct(data).then((data) => {
-      if (data == "406b") {
-        socket.emit("resp-new-product", "El producto ya existe" );
-      } else if (data == "406a") {
-        socket.emit("resp-new-product", "Todos los campos son obligatorios" );
-      } else {
-        manager.getProductos().then((data) => {
-          if (data) {
-            io.emit("resp-new-product", data);
-          }
-        });
-      }
-    });
-  });
-  socket.on('delete-product', (id) => {
-    manager.deleteProducto(parseInt(id)).then((data) => {
-      if (data == 406) {
-        socket.emit("resp-delete-product", "El producto no existe" );
-      } else {
-        manager.getProductos().then((data) => {
-          if (data) {
-            io.emit("resp-delete-product", data);
-          }
-        });
-      }
-    });
-  });
-});
-*/
 
 mongoose.set("strictQuery", false);
 

@@ -1,11 +1,41 @@
 <script>
   function addProduct(id) { 
-    let cartId = prompt('Ingrese id carrito:')
+    let cartId = document.cookie.split(';')
+    cartId = cartId[1].split('=')[1]
     fetch(`http://localhost:8080/api/carts/${cartId}/product/${id}`,{ method:"post" }) 
-    window.location.href = 'http://localhost:8080/products' 
+    window.location.href = 'http://localhost:8080/products'
+    alert('Producto agregado al carrito') 
+  }
+
+  function btnCart() {
+    let cartId = document.cookie.split(';')
+    cartId = cartId[1].split('=')[1]
+    console.log(cartId)
+    window.location.href = `http://localhost:8080/carts/${cartId}`
+  }
+
+  function btnLogout() {
+    window.location.href = 'http://localhost:8080/session/logout'
   }
 </script>
 
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item mx-2">
+          <a class="nav-link active" aria-current="page" href="/products">Productos</a>
+        </li>
+        <li class="nav-item mx-2">
+          <button onclick="btnCart()"><a class="nav-link active" aria-current="page" >Cart</a></button>
+        </li>
+        <li class="nav-item mx-2">
+          <button onclick="btnLogout()"><a class="nav-link active" aria-current="page" >Logout</a></button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 <div class="container">
   <div class="d-flex flex-column">
     <div>

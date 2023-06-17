@@ -2,6 +2,7 @@ import { Router } from "express";
 import userModel from "../model/user.model.js";
 import { createHash, isValidPassword, JWT_COOKIE_NAME, generateToken } from "../utils.js";
 import passport from "passport";
+import { manager as cManager } from "../manager/db/cartsManager.js";
 
 const router = Router();
 
@@ -46,8 +47,11 @@ router.post(
         .status(400)
         .send({ status: "error", error: "Invalid credentials" });
     }
-
-    res.cookie(JWT_COOKIE_NAME, req.user.token).redirect("/products");
+    cManager.addCart().then((data) => {
+      if (data) {
+        res.cookie(JWT_COOKIE_NAME, req.user.token).cookie("cartID", data.id).redirect("/products");
+      }
+    });
   }
 );
 
@@ -67,14 +71,18 @@ router.get(
   "/githubcallback",
   passport.authenticate("github", { failureRedirect: "/session/login" }),
   async (req, res) => {
-    const token = generateToken(req.user);
-    req.user.token = token;
-    res.cookie(JWT_COOKIE_NAME, req.user.token).redirect("/products");
+    cManager.addCart().then((data) => {
+      if (data) {
+        const token = generateToken(req.user);
+        req.user.token = token;
+        res.cookie(JWT_COOKIE_NAME, req.user.token).cookie("cartID", data.id).redirect("/products");
+      }
+    });
   }
 );
 
 router.get("/logout", (req, res) => {
-  res.clearCookie(JWT_COOKIE_NAME).redirect("/session/login");
+  res.clearCookie(JWT_COOKIE_NAME).clearCookie("cartID", {signed:true}).redirect("/session/login");
 });
 
 export default router;
