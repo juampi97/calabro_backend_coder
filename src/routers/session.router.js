@@ -1,12 +1,12 @@
 import { Router } from "express";
 import userModel from "../model/user.model.js";
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash, isValidPassword, JWT_COOKIE_NAME } from "../utils.js";
 import passport from "passport";
 
 const router = Router();
 
 router.get("/register", (req, res) => {
-  const email = req.session.email;
+  const email = req.user.email;
   if (email) {
     res.redirect("/products");
   } else {
@@ -31,7 +31,7 @@ router.get("/failureRegister", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  const email = req.session.email;
+  const email = req.user.email;
   if (email) {
     res.redirect("/products");
   } else {
@@ -49,13 +49,7 @@ router.post(
         .send({ status: "error", error: "Invalid credentials" });
     }
 
-    req.session.user = {
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      email: req.user.email,
-      age: req.user.age,
-    };
-    res.redirect("/products");
+    res.cookie(JWT_COOKIE_NAME, req.user.token).redirect("/products");
   }
 );
 
@@ -84,15 +78,7 @@ router.get(
 );
 
 router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return res
-        .status(500)
-        .render("errors/base", { error: "Internal server error" });
-    } else {
-      res.redirect("/session/login");
-    }
-  });
+  res.clearCookie(JWT_COOKIE_NAME).redirect('/session/login')
 });
 
 export default router;

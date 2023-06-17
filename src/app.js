@@ -1,5 +1,5 @@
 import express from "express";
-import { __dirname } from "./utils.js";
+import { __dirname, passportCall } from "./utils.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import productsRouter from "./routers/products.router.js";
@@ -7,6 +7,7 @@ import cartsRouter from "./routers/carts.router.js";
 import viewsRouter from "./routers/views.router.js";
 import chatRouter from "./routers/chat.router.js";
 import sessionRouter from "./routers/session.router.js";
+import productViewsRouter from "./routers/products.view.router.js";
 import mongoose from "mongoose";
 
 
@@ -50,12 +51,13 @@ app.set("view engine", "handlebars");
 
 app.use(express.static(__dirname + "/public"));
 
-app.use("/", viewsRouter);
+app.use("/" ,viewsRouter);
 app.use("/chat", chatRouter);
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
 app.use("/api/carts/", cartsRouter);
 app.use("/session/", sessionRouter);
+app.use("/products", passportCall('jwt') , productViewsRouter)
 
 /*
 io.on("connection", (socket) => {

@@ -1,10 +1,12 @@
 import passport from "passport";
 import local from "passport-local";
+import passport_jwt, { ExtractJwt } from "passport-jwt";
 import userModel from "../model/user.model.js";
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash, isValidPassword, generateToken, extractCookie, JWT_COOKIE_NAME, JWT_SECRET_KEY } from "../utils.js";
 import GitHubStrategy from "passport-github2";
 
 const LocalStrategy = local.Strategy;
+const JWTStrategy = passport_jwt.Strategy;
 const initializePassport = () => {
 
     passport.use('github', new GitHubStrategy({
@@ -74,6 +76,9 @@ const initializePassport = () => {
 
           if (!isValidPassword(user, password)) return done(null, false);
 
+          const token = generateToken(user);
+          user.token = token;
+
           return done(null, user);
         } catch (error) {
           done("error");
@@ -81,6 +86,13 @@ const initializePassport = () => {
       }
     )
   );
+
+  passport.use('jwt', new JWTStrategy({
+    jwtFromRequest: ExtractJwt.fromExtractors([extractCookie]),
+    secretOrKey: JWT_SECRET_KEY
+}, async(jwt_payload, done) => {
+    done(null, jwt_payload)
+}))
 
   passport.serializeUser((user, done) => {
     done(null, user._id);
