@@ -47,7 +47,7 @@ router.post(
         .status(400)
         .send({ status: "error", error: "Invalid credentials" });
     }
-    cManager.addCart().then((data) => {
+    cManager.addCart(req.user.email).then((data) => {
       if (data) {
         res.cookie(JWT_COOKIE_NAME, req.user.token).cookie("cartID", data.id).redirect("/products");
       }
@@ -71,7 +71,7 @@ router.get(
   "/githubcallback",
   passport.authenticate("github", { failureRedirect: "/session/login" }),
   async (req, res) => {
-    cManager.addCart().then((data) => {
+    cManager.addCart(req.user.email).then((data) => {
       if (data) {
         const token = generateToken(req.user);
         req.user.token = token;

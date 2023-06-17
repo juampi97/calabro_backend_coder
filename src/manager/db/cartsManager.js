@@ -1,5 +1,7 @@
+import { log } from "console";
 import cartModel from "../../model/carts.model.js";
 import productModel from "../../model/products.model.js";
+import userModel from "../../model/user.model.js";
 
 class CartsManger {
   #path;
@@ -7,11 +9,12 @@ class CartsManger {
   constructor() {
     this.#carts = [];
   }
-  addCart = async () => {
+  addCart = async (email) => {
     let products = [];
-    let result = cartModel.create({
-      products,
-    });
+    let result = await cartModel.create({products});
+    let user = await userModel.findOne({ email: email });
+    user.cartID.push(result._id);
+    let userUpdated = await userModel.updateOne({ email: email }, user);
     return result;
   };
 
