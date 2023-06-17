@@ -21,7 +21,7 @@ const initializePassport = () => {
             if (user) return done(null, user)
             const newUser = await userModel.create({
                 first_name: profile._json.name,
-                email: profile._json.email
+                email: profile._json.email ? profile._json.email : profile._json.login,
             })
             return done(null, newUser)
         } catch(err) {
