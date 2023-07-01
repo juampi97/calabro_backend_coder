@@ -23,7 +23,9 @@ import cookieParser from "cookie-parser";
 import passport from "passport"
 import initializePassport from "./config/passport.config.js";
 
-const uri = "mongodb+srv://coderhouse:coderhouse@cluster0.2x8nri1.mongodb.net/";
+import config from "./config/config.js";
+
+const uri = config.mongoURL;
 
 const app = express();
 app.use(express.json());
@@ -33,10 +35,10 @@ app.use(cookieParser("S3crEt"));
 app.use((session({
   store: MongoStore.create({ 
     mongoUrl: uri,
-    dbName: "test",
+    dbName: config.db_name,
     mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true }
    }),
-   secret: "c0d3rhous3",
+   secret: config.db_password,
    resave: true,
    saveUninitialized: true 
 })));
@@ -60,14 +62,14 @@ app.use("/products", passportCall('jwt') , productViewsRouter)
 
 mongoose.set("strictQuery", false);
 
-const httpServer = app.listen(8080, () => {
-  console.log("Servidor HTTP escuchando en el puerto 8080");
+const httpServer = app.listen(config.port, () => {
+  console.log(`Servidor HTTP escuchando en el puerto ${config.port}`);
 });
 const io = new Server(httpServer);
 
 try {
   await mongoose.connect(uri,{
-    dbName: "test"
+    dbName: config.db_name,
   });
   console.log("DB connected!");
 } catch (err) {

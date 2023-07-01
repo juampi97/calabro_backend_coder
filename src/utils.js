@@ -3,6 +3,7 @@ import { dirname } from 'path'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
+import config from './config/config.js'
 
 const createHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10))
@@ -15,8 +16,8 @@ const isValidPassword = (user, password) => {
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const JWT_SECRET_KEY = 'secret'
-const JWT_COOKIE_NAME = 'codercookie'
+const JWT_SECRET_KEY = config.jwt_secret_key
+const JWT_COOKIE_NAME = config.jwt_cookie_name
 
 const generateToken = user => {
     const token = jwt.sign({user}, JWT_SECRET_KEY, {expiresIn: '24h'})
