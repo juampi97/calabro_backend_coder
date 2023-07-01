@@ -1,7 +1,6 @@
-import { log } from "console";
-import cartModel from "../../model/carts.model.js";
-import productModel from "../../model/products.model.js";
-import userModel from "../../model/user.model.js";
+import cartModel from "../model/carts.model.js";
+import productModel from "../model/products.model.js";
+import userModel from "../model/user.model.js";
 
 class CartsManger {
   #path;

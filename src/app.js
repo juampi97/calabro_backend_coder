@@ -11,7 +11,7 @@ import productViewsRouter from "./routers/products.view.router.js";
 import mongoose from "mongoose";
 
 
-import  chatManager  from "./manager/db/messagesManager.js";
+import  chatManager  from "./dao/messagesManager.js";
 import messageModel from "./model/mesagges.model.js";
 
 import bodyParser from "body-parser";
